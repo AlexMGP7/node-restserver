@@ -10,8 +10,10 @@ const usuariosGet = async (req, res = response) => {
     const { limite = 5, desde = 0 } = req.query;
 
     const [total, usuarios] = await Promise.all([
-        Usuario.countDocuments({estado: true}),
-        Usuario.find({estado: true}).skip(Number(desde)).limit(Number(limite))
+        Usuario.countDocuments({ estado: true }),
+        // Limitar los campos devueltos por la consulta
+        Usuario.find({ estado: true }).select('-password -__v').skip(Number(desde)).limit(Number(limite))
+
     ]);
 
     res.json({
@@ -64,16 +66,9 @@ const usuariosPatch = async (req, res = response) => {
 const usuariosDelete = async (req, res = response) => {
 
     const { id } = req.params;
+    const usuario = await Usuario.findByIdAndUpdate(id, { estado: false });
 
-    // Fisicamente lo borramos
-
-    // const usuario = await Usuario.findByIdAndDelete( id );
-
-    const usuario = await Usuario.findByIdAndUpdate (id, {estado:false});
-
-    res.json({
-        usuario
-    });
+    res.json({usuario});
 }
 
 module.exports = {
