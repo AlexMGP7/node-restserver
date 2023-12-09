@@ -36,8 +36,7 @@
         // console.log('id_token', response.credential);
 
         const body = { id_token: response.credential };
-
-        fetch("https://node-restserver-production-ee94.up.railway.app/api/auth/google", {
+        fetch("http://localhost:8080/api/auth/google", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
